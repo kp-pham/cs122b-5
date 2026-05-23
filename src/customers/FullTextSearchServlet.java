@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@WebServlet(name = "customers.FullTextSearchServlet", urlPatterns = "/api/full-text")
+@WebServlet(name = "customers.FullTextSearchServlet", urlPatterns = "/api/customers/full-text")
 public class FullTextSearchServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
