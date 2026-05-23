@@ -20,7 +20,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-@WebServlet(name = "customers.TopRatedServlet", urlPatterns="/api/")
+@WebServlet(name = "customers.TopRatedServlet", urlPatterns="/api/customers/top-rated")
 public class TopRatedServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 

@@ -66,7 +66,7 @@ function submitCartForm(submitFormEvent) {
 jQuery.ajax({
    dataType: "json",
    method: "GET",
-   url: "api/",
+   url: "api/customers/top-rated",
    success: (resultData) => handleResult(resultData)
 });
 
