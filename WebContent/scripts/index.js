@@ -55,7 +55,7 @@ showPrefixes();
 jQuery.ajax({
     dataType: "json",
     method: "GET",
-    url: "api/genres",
+    url: "api/customers/genres",
     success: (resultData) => handleResult(resultData)
 });
 
