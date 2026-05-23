@@ -38,11 +38,11 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
 
-        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        // String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 
         PrintWriter out = response.getWriter();
 
-        try {
+        /* try {
             RecaptchaVerifyUtils.verify(gRecaptchaResponse);
 
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class LoginServlet extends HttpServlet {
 
             out.close();
             return;
-        }
+        } */
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
