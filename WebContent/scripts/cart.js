@@ -60,7 +60,7 @@ function submitAddForm(submitFormEvent) {
     jQuery.ajax({
         dataType: "json",
         method: "POST",
-        url: `api/cart?action=add&id=${encodeURIComponent(id)}`,
+        url: `api/customers/cart?action=add&id=${encodeURIComponent(id)}`,
         success: (resultData) => handleResult(resultData)
     });
 }
@@ -73,7 +73,7 @@ function submitSubtractForm(submitFormEvent) {
     jQuery.ajax({
         dataType: "json",
         method: "POST",
-        url: `api/cart?action=subtract&id=${encodeURIComponent(id)}`,
+        url: `api/customers/cart?action=subtract&id=${encodeURIComponent(id)}`,
         success: (resultData) => handleResult(resultData)
     });
 }
@@ -86,7 +86,7 @@ function submitRemoveForm(submitFormEvent) {
     jQuery.ajax({
         dataType: "json",
         method: "POST",
-        url: `api/cart?action=remove&id=${encodeURIComponent(id)}`,
+        url: `api/customers/cart?action=remove&id=${encodeURIComponent(id)}`,
         success: (resultData) => handleResult(resultData)
     });
 }
@@ -99,7 +99,7 @@ function submitProceedForm(submitFormEvent) {
 jQuery.ajax({
     dataType: "json",
     method: "GET",
-    url: "api/cart",
+    url: "api/customers/cart",
     success: (resultData) => handleResult(resultData)
 });
 

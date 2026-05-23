@@ -25,7 +25,7 @@ import java.math.RoundingMode;
 
 import utils.ConnectionManager;
 
-@WebServlet(name = "customers.CartServlet", urlPatterns = "/api/cart")
+@WebServlet(name = "customers.CartServlet", urlPatterns = "/api/customers/cart")
 public class CartServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 

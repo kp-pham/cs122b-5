@@ -175,7 +175,7 @@ function submitCartForm(submitFormEvent) {
     jQuery.ajax({
         dataType: "json",
         method: "POST",
-        url: `api/cart?action=add&id=${encodeURIComponent(id)}`,
+        url: `api/customers/cart?action=add&id=${encodeURIComponent(id)}`,
         success: showSuccess,
         failure: showFailure
     });
