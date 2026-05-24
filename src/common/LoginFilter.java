@@ -1,5 +1,10 @@
+package common;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -8,6 +13,7 @@ import java.util.ArrayList;
 
 @WebFilter(filterName = "LoginFilter", urlPatterns="/*")
 public class LoginFilter implements Filter {
+    private static final int SESSION_TTL_SECONDS = 24 * 60 * 60;
     private final ArrayList<String> allowedURIs = new ArrayList<>();
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -67,5 +73,52 @@ public class LoginFilter implements Filter {
         allowedURIs.add(".css");
         allowedURIs.add(".ico");
         allowedURIs.add(".png");
+    }
+
+    private void validateSession(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
+        String sessionId = getCookieValue(httpRequest, "redisSessionId");
+
+        if (sessionId == null) {
+            httpResponse.sendRedirect("login.html");
+            return;
+        }
+
+        String sessionKey = "session:" + sessionId;
+        try {
+            String sessionJson = RedisUtil.get(sessionKey);
+
+            if (sessionJson == null || sessionJson.isEmpty()) {
+                httpResponse.sendRedirect("login.html");
+                return;
+            }
+
+            JsonObject sessionObject = JsonParser.parseString(sessionJson).getAsJsonObject();
+            String username = sessionObject.get("username").getAsString();
+            String loginTime = sessionObject.get("loginTime").getAsString();
+
+            RedisUtil.set(sessionKey, loginTime, SESSION_TTL_SECONDS);
+
+            httpRequest.setAttribute("username", username);
+            httpRequest.setAttribute("loginTime", loginTime);
+
+            chain.doFilter(request, response);
+        } catch (Exception e) {
+            httpRequest.getServletContext().log("Redis error", e);
+            httpResponse.sendRedirect("login.html");
+        }
+    }
+
+    private String getCookieValue(HttpServletRequest request, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(cookieName)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        return null;
     }
 }
