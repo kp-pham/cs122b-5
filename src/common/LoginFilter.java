@@ -28,27 +28,51 @@ public class LoginFilter implements Filter {
             return;
         }
 
-        if (isEmployeeOnly(requestURI)) {
-            if (httpRequest.getSession().getAttribute("employee") == null) {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + "/_dashboard/login.html");
-                return;
-            }
+        String sessionId = getCookieValue(httpRequest, "redisSessionId");
 
-            chain.doFilter(request, response);
+        if (sessionId == null) {
+            httpResponse.sendRedirect( "login.html");
             return;
         }
 
-        if (isCustomerOnly(requestURI)) {
-            if (httpRequest.getSession().getAttribute("customer") == null) {
+        String sessionKey = "session:" + sessionId;
+
+        try {
+            String sessionJson = RedisUtil.get(sessionKey);
+
+            if (sessionJson == null || sessionJson.isEmpty()) {
+                httpResponse.sendRedirect("login.html");
+                return;
+            }
+
+            JsonObject sessionObject = JsonParser.parseString(sessionJson).getAsJsonObject();
+            String username = sessionObject.get("username").getAsString();
+            String loginTime = sessionObject.get("loginTime").getAsString();
+            String userType = sessionObject.get("userType").getAsString();
+
+
+            if (isCustomerOnly(requestURI) && !userType.equals("customer")) {
                 httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.html");
                 return;
             }
 
-            chain.doFilter(request, response);
-            return;
-        }
+            if (isEmployeeOnly(requestURI) && !userType.equals("employee")) {
+                httpResponse.sendRedirect(httpRequest.getContextPath() + "/_dashboard/login.html");
+                return;
+            }
 
-        httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.html");
+            RedisUtil.set(sessionKey, loginTime, SESSION_TTL_SECONDS);
+
+            httpRequest.setAttribute("username", username);
+            httpRequest.setAttribute("loginTime", loginTime);
+            httpRequest.setAttribute("userType", userType);
+
+            chain.doFilter(request, response);
+
+        } catch (Exception e) {
+            httpRequest.getServletContext().log("Redis error", e);
+            httpResponse.sendRedirect("login.html");
+        }
     }
 
     private boolean isUrlAllowedWithoutLogin(String requestURI) {
@@ -73,39 +97,6 @@ public class LoginFilter implements Filter {
         allowedURIs.add(".css");
         allowedURIs.add(".ico");
         allowedURIs.add(".png");
-    }
-
-    private void validateSession(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
-        String sessionId = getCookieValue(httpRequest, "redisSessionId");
-
-        if (sessionId == null) {
-            httpResponse.sendRedirect("login.html");
-            return;
-        }
-
-        String sessionKey = "session:" + sessionId;
-        try {
-            String sessionJson = RedisUtil.get(sessionKey);
-
-            if (sessionJson == null || sessionJson.isEmpty()) {
-                httpResponse.sendRedirect("login.html");
-                return;
-            }
-
-            JsonObject sessionObject = JsonParser.parseString(sessionJson).getAsJsonObject();
-            String username = sessionObject.get("username").getAsString();
-            String loginTime = sessionObject.get("loginTime").getAsString();
-
-            RedisUtil.set(sessionKey, loginTime, SESSION_TTL_SECONDS);
-
-            httpRequest.setAttribute("username", username);
-            httpRequest.setAttribute("loginTime", loginTime);
-
-            chain.doFilter(request, response);
-        } catch (Exception e) {
-            httpRequest.getServletContext().log("Redis error", e);
-            httpResponse.sendRedirect("login.html");
-        }
     }
 
     private String getCookieValue(HttpServletRequest request, String cookieName) {
