@@ -5,10 +5,12 @@ import com.google.gson.JsonObject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import common.RedisUtil;
 import customers.Customer;
 import customers.RecaptchaVerifyUtils;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +20,10 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
 
 import org.jasypt.util.password.PasswordEncryptor;
 import org.jasypt.util.password.StrongPasswordEncryptor;
@@ -26,6 +32,7 @@ import utils.ConnectionManager;
 
 @WebServlet(name = "employees.LoginServlet", urlPatterns = "/api/employees/login")
 public class LoginServlet extends HttpServlet {
+    private static final int SESSION_TTL_SECONDS = 24 * 60 * 60;
     private static final long serialVersionUID = 2L;
 
     private DataSource dataSource;
@@ -74,8 +81,21 @@ public class LoginServlet extends HttpServlet {
             PasswordEncryptor passwordEncryptor = new StrongPasswordEncryptor();
 
             if (rs.next() && passwordEncryptor.checkPassword(password, rs.getString("password"))) {
-                String fullName = rs.getString("fullName");
-                request.getSession().setAttribute("employee", new Employee(fullName, email));
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                String loginTime = dateFormat.format(new Date());
+                String sessionId = UUID.randomUUID().toString();
+
+                JsonObject sessionObject = new JsonObject();
+                sessionObject.addProperty("email", email);
+                sessionObject.addProperty("loginTime", loginTime);
+                sessionObject.addProperty("userType", "employee");
+                RedisUtil.set("session" + sessionId, sessionObject.toString(), SESSION_TTL_SECONDS);
+
+                Cookie sessionCookie = new Cookie("session", sessionId);
+                sessionCookie.setHttpOnly(true);
+                sessionCookie.setPath("/_dashboard");
+                sessionCookie.setMaxAge(SESSION_TTL_SECONDS);
+                response.addCookie(sessionCookie);
                 jsonObject.addProperty("status", "success");
                 jsonObject.addProperty("message", "success");
                 response.setStatus(200);

@@ -87,6 +87,7 @@ public class LoginServlet extends HttpServlet {
                 JsonObject sessionObject = new JsonObject();
                 sessionObject.addProperty("email", email);
                 sessionObject.addProperty("loginTime", loginTime);
+                sessionObject.addProperty("userType", "customer");
                 RedisUtil.set("session" + sessionId, sessionObject.toString(), SESSION_TTL_SECONDS);
 
                 Cookie sessionCookie = new Cookie("session", sessionId);
