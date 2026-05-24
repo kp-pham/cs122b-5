@@ -87,7 +87,7 @@
         <profile>
             <id>star</id>
             <properties>
-                <endpointDir>src/star</endpointDir>
+                <endpointDir>src/movies</endpointDir>
                 <excludes>**/login.html, **/login.js</excludes>
             </properties>
         </profile>

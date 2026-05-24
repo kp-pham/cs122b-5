@@ -1,9 +1,8 @@
-package customers;
+package movies.customers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,7 +24,7 @@ import java.math.RoundingMode;
 
 import utils.ConnectionManager;
 
-@WebServlet(name = "customers.CartServlet", urlPatterns = "/api/customers/cart")
+@WebServlet(name = "movies.customers.CartServlet", urlPatterns = "/api/movies.customers/cart")
 public class CartServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 

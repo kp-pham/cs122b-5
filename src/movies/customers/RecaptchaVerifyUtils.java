@@ -1,4 +1,4 @@
-package customers;
+package movies.customers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

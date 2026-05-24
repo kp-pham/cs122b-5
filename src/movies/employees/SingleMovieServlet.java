@@ -1,10 +1,8 @@
-package employees;
+package movies.employees;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,7 +19,7 @@ import java.sql.Connection;
 import java.sql.Types;
 import java.sql.ResultSet;
 
-@WebServlet(name = "employees.SingleMovieServlet", urlPatterns="/api/employees/movie")
+@WebServlet(name = "movies.employees.SingleMovieServlet", urlPatterns="/api/movies.employees/movie")
 public class SingleMovieServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
@@ -155,7 +153,7 @@ public class SingleMovieServlet extends HttpServlet {
 
                     jsonObject.addProperty("message", String.format("Movie added. movieId: %s starId: %s genreId: %d", movieId, starId, genreId));
                     response.setStatus(201);
-                    response.setHeader("Location", "/api/customers/movie?id=" + movieId);
+                    response.setHeader("Location", "/api/movies.customers/movie?id=" + movieId);
                     break;
             }
 

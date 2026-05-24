@@ -18,7 +18,7 @@ The fourth project extends the third project and implements autocomplete suggest
   * Search results combine fuzzy search and full-text search
 * Connection Pooling
   * ``WebContent/META-INF/context.xml`` enables connection pooling and caching for prepared statements.
-  * ``src/customers/AutocompleteServlet`` and ``src/customers/FullTextSearchServlet`` use prepared statements to perform fuzzy search and full-text search when queries are received from the frontend.
+  * ``src/movies.customers/AutocompleteServlet`` and ``src/movies.customers/FullTextSearchServlet`` use prepared statements to perform fuzzy search and full-text search when queries are received from the frontend.
 * Master-Slave Replication
   * ``MASTER_LOG_FILE`` and ``MASTER_LOG_POS`` configured on the master instance
   * Asynchronous data replication from the master instance to the slave instance

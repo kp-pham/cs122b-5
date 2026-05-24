@@ -1,4 +1,4 @@
-package customers;
+package movies.customers;
 
 public class Customer {
     private final int id;

@@ -80,7 +80,7 @@ public class LoginFilter implements Filter {
     }
 
     private boolean isEmployeeOnly(String requestURI) {
-        return requestURI.startsWith("/_dashboard") || requestURI.startsWith("/api/employees");
+        return requestURI.startsWith("/_dashboard") || requestURI.startsWith("/api/movies.employees");
     }
 
     private boolean isCustomerOnly(String requestURI) {
@@ -91,8 +91,8 @@ public class LoginFilter implements Filter {
         allowedURIs.add("login.html");
         allowedURIs.add("login.js");
         allowedURIs.add("_dashboard/login.html");
-        allowedURIs.add("api/customers/login");
-        allowedURIs.add("api/employees/login");
+        allowedURIs.add("api/movies.customers/login");
+        allowedURIs.add("api/movies.employees/login");
 
         allowedURIs.add(".css");
         allowedURIs.add(".ico");

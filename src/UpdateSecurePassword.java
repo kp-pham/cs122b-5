@@ -35,7 +35,7 @@ public class UpdateSecurePassword {
 
             String encryptedPassword = passwordEncryptor.encryptPassword(plaintext);
 
-            String updateQuery = String.format("UPDATE customers SET password = '%s' WHERE id = %s", encryptedPassword, id);
+            String updateQuery = String.format("UPDATE movies.customers SET password = '%s' WHERE id = %s", encryptedPassword, id);
             updateQueries.add(updateQuery);
         }
 

@@ -1,4 +1,4 @@
-package customers;
+package movies.customers;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;

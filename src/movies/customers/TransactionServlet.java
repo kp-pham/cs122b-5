@@ -1,9 +1,8 @@
-package customers;
+package movies.customers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,7 +23,7 @@ import java.util.Map;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@WebServlet(name = "customers.TransactionServlet", urlPatterns = "/api/customers/transactions")
+@WebServlet(name = "movies.customers.TransactionServlet", urlPatterns = "/api/movies.customers/transactions")
 public class TransactionServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 

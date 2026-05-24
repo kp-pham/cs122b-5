@@ -1,4 +1,4 @@
-package employees;
+package movies.employees;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

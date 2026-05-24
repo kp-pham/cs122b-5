@@ -1,4 +1,4 @@
-package employees;
+package movies.employees;
 
 public class Employee {
     private final String fullName;

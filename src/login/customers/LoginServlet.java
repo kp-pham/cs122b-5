@@ -1,16 +1,13 @@
-package employees;
+package login.customers;
+
+import common.RedisUtil;
 
 import com.google.gson.JsonObject;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
-import common.RedisUtil;
-import customers.Customer;
-import customers.RecaptchaVerifyUtils;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +27,7 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 import utils.ConnectionManager;
 
 
-@WebServlet(name = "employees.LoginServlet", urlPatterns = "/api/employees/login")
+@WebServlet(name = "login.movies.customers.LoginServlet", urlPatterns = "/api/movies.customers/login")
 public class LoginServlet extends HttpServlet {
     private static final int SESSION_TTL_SECONDS = 24 * 60 * 60;
     private static final long serialVersionUID = 2L;
@@ -38,6 +35,8 @@ public class LoginServlet extends HttpServlet {
     private DataSource dataSource;
 
     public void init(ServletConfig config) {
+        RedisUtil.init();
+
         try {
             dataSource = ConnectionManager.getSlaveDataSource();
         } catch (NamingException e) {
@@ -48,16 +47,16 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
 
-        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        // String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 
         PrintWriter out = response.getWriter();
 
-        try {
+        /* try {
             RecaptchaVerifyUtils.verify(gRecaptchaResponse);
 
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("message", "reCAPTCHA Verification Failed. Please try again.");
+            jsonObject.addProperty("message", "reCAPTCHA verification failed. Please try again.");
             out.write(jsonObject.toString());
 
             request.getServletContext().log("Error:", e);
@@ -65,13 +64,13 @@ public class LoginServlet extends HttpServlet {
 
             out.close();
             return;
-        }
+        } */
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
         try (Connection conn = dataSource.getConnection()) {
-            String query = "SELECT fullName, password FROM employees WHERE email = ?";
+            String query = "SELECT id, password FROM customers WHERE email = ?";
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setString(1, email);
             ResultSet rs = statement.executeQuery();
@@ -88,14 +87,15 @@ public class LoginServlet extends HttpServlet {
                 JsonObject sessionObject = new JsonObject();
                 sessionObject.addProperty("email", email);
                 sessionObject.addProperty("loginTime", loginTime);
-                sessionObject.addProperty("userType", "employee");
+                sessionObject.addProperty("userType", "customer");
                 RedisUtil.set("session" + sessionId, sessionObject.toString(), SESSION_TTL_SECONDS);
 
                 Cookie sessionCookie = new Cookie("session", sessionId);
                 sessionCookie.setHttpOnly(true);
-                sessionCookie.setPath("/_dashboard");
+                sessionCookie.setPath("/");
                 sessionCookie.setMaxAge(SESSION_TTL_SECONDS);
                 response.addCookie(sessionCookie);
+
                 jsonObject.addProperty("status", "success");
                 jsonObject.addProperty("message", "success");
                 response.setStatus(200);

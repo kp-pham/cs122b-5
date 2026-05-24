@@ -39,7 +39,7 @@
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Login" enabled="true">
           <stringProp name="HTTPSampler.port">8443</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
-          <stringProp name="HTTPSampler.path">/cs122b/api/customers/login</stringProp>
+          <stringProp name="HTTPSampler.path">/cs122b/api/movies.customers/login</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>

@@ -1,10 +1,9 @@
-package customers;
+package movies.customers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import jakarta.servlet.ServletConfig;
@@ -24,8 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@WebServlet(name = "customers.FullTextSearchServlet", urlPatterns = "/api/customers/full-text")
-public class FullTextSearchServlet extends HttpServlet {
+@WebServlet(name = "movies.customers.SearchServlet", urlPatterns = "/api/movies.customers/search")
+public class SearchServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
     private DataSource dataSource;
@@ -55,24 +54,33 @@ public class FullTextSearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
 
-        String q = request.getParameter("q");
+        String title = request.getParameter("title");
+        String year = request.getParameter("year");
+        String director = request.getParameter("director");
+        String star = request.getParameter("star");
         String sort = request.getParameter("sort");
         String page = request.getParameter("page");
         String size = request.getParameter("pageSize");
 
-        String trimmedQuery = (q == null) ? null : q.trim();
+        String trimmedTitle = (title == null) ? null : title.trim();
+        String trimmedYear = (year == null) ? null : year.trim();
+        String trimmedDirector = (director == null) ? null : director.trim();
+        String trimmedStar = (star == null) ? null : star.trim();
         String trimmedPage = (page == null) ? null : page.trim();
         String trimmedSize = (size == null) ? null : size.trim();
 
-        boolean hasQuery = (trimmedQuery != null && !trimmedQuery.isEmpty());
+        boolean hasTitle = (trimmedTitle != null && !trimmedTitle.isEmpty());
+        boolean hasYear = (trimmedYear != null && !trimmedYear.isEmpty());
+        boolean hasDirector = (trimmedDirector != null && !trimmedDirector.isEmpty());
+        boolean hasStar = (trimmedStar != null && !trimmedStar.isEmpty());
         boolean hasPage = (trimmedPage != null && !trimmedPage.isEmpty());
         boolean hasSize = (trimmedSize != null && !trimmedSize.isEmpty());
 
         PrintWriter out = response.getWriter();
 
-        if (!hasQuery) {
+        if (!hasTitle && !hasYear && !hasDirector && !hasStar) {
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("message", "Please enter a search term.");
+            jsonObject.addProperty("message", "Please provide at least one search parameter");
             out.write(jsonObject.toString());
 
             response.setStatus(400);
@@ -136,11 +144,37 @@ public class FullTextSearchServlet extends HttpServlet {
                            "    GROUP BY S.id " +
                            ") AS S ON SIM.starId = S.id " +
                            "LEFT JOIN ratings AS R ON R.movieId = M.id " +
-                           "WHERE M.title = ? " +
-                           "OR MATCH (M.title) AGAINST (? IN BOOLEAN MODE) " +
-                           "OR M.title LIKE CONCAT('%', ?, '%') " +
-                           "OR edth(LOWER(?), LOWER(M.title), ?) " +
-                           "GROUP BY M.id, M.title, M.year, M.director, R.rating ";
+                           "WHERE 1 = 1 ";
+
+            List<Object> params = new ArrayList<>();
+
+            if (hasTitle) {
+                query += "AND M.title LIKE ? ";
+                params.add("%" + trimmedTitle + "%");
+            }
+
+            if (hasYear) {
+                query += "AND M.year = ? ";
+                params.add(Integer.parseInt(trimmedYear));
+            }
+
+            if (hasDirector) {
+                query += "AND M.director LIKE ? ";
+                params.add("%" + trimmedDirector + "%");
+            }
+
+            if (hasStar) {
+                query += "AND EXISTS (" +
+                         "    SELECT 1 " +
+                         "    FROM stars_in_movies AS SIM " +
+                         "    INNER JOIN stars AS S ON SIM.starId = S.id " +
+                         "    WHERE SIM.movieId = M.id " +
+                         "    AND S.name LIKE ? " +
+                         ") ";
+                params.add("%" + trimmedStar + "%");
+            }
+
+            query += "GROUP BY M.id, M.title, M.year, M.director, R.rating ";
 
             switch(sort) {
                 case SORT_TITLE_DESC_RATING_ASC:
@@ -178,33 +212,15 @@ public class FullTextSearchServlet extends HttpServlet {
 
             query += "LIMIT ? OFFSET ?";
 
-            String[] tokens = trimmedQuery.split("\\s+");
-
-            StringBuilder logicalOperators = new StringBuilder();
-
-            for (int i = 0; i < tokens.length; ++i) {
-                logicalOperators.append("+")
-                                .append(tokens[i])
-                                .append("*");
-
-                if (i < tokens.length - 1) {
-                    logicalOperators.append(" ");
-                }
-            }
-
-            String entry = logicalOperators.toString();
-
-            // Allow 25% of the characters to be incorrect
-            int threshold = Math.max(1, trimmedQuery.length() / 4);
+            params.add(pageSize + 1);
+            params.add(offset);
 
             PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, trimmedQuery);
-            statement.setString(2, entry);
-            statement.setString(3, trimmedQuery);
-            statement.setString(4, trimmedQuery);
-            statement.setInt(5, threshold);
-            statement.setInt(6, pageSize + 1);
-            statement.setInt(7, offset);
+            for (int i = 0; i < params.size(); ++i) {
+                statement.setObject(i + 1, params.get(i));
+            }
+
+            long start = System.nanoTime();
 
             ResultSet rs = statement.executeQuery();
 
@@ -227,6 +243,12 @@ public class FullTextSearchServlet extends HttpServlet {
 
                 jsonArray.add(jsonObject);
             }
+
+            long end = System.nanoTime();
+
+            long tj = end - start;
+            request.setAttribute("TJ", tj);
+
 
             JsonObject jsonObject = new JsonObject();
 

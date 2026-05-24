@@ -1,4 +1,4 @@
-package employees;
+package movies.customers;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet(name = "employees.LogoutServlet", urlPatterns = "/api/employees/logout")
+@WebServlet(name = "movies.customers.LogoutServlet", urlPatterns = "/api/movies.customers/logout")
 public class LogoutServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
@@ -19,7 +19,6 @@ public class LogoutServlet extends HttpServlet {
             session.invalidate();
         }
 
-        response.sendRedirect(request.getContextPath() + "/_dashboard/login.html");
+        response.sendRedirect(request.getContextPath() + "/login.html");
     }
 }
-

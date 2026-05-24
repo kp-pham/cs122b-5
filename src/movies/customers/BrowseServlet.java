@@ -1,10 +1,9 @@
-package customers;
+package movies.customers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import jakarta.servlet.ServletConfig;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@WebServlet(name = "customers.BrowseServlet", urlPatterns = "/api/customers/browse")
+@WebServlet(name = "movies.customers.BrowseServlet", urlPatterns = "/api/movies.customers/browse")
 public class BrowseServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 

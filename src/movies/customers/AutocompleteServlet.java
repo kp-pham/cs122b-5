@@ -1,10 +1,8 @@
-package customers;
+package movies.customers;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import jakarta.servlet.ServletConfig;
@@ -21,7 +19,7 @@ import java.sql.ResultSet;
 
 import utils.ConnectionManager;
 
-@WebServlet(name = "customers.AutocompleteServlet", urlPatterns="/api/customers/autocomplete")
+@WebServlet(name = "movies.customers.AutocompleteServlet", urlPatterns="/api/movies.customers/autocomplete")
 public class AutocompleteServlet extends HttpServlet {
     private static final long SerialVersionUID = 2L;
 

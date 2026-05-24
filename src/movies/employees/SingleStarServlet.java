@@ -1,10 +1,7 @@
-package employees;
+package movies.employees;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,9 +17,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Types;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 
-@WebServlet(name = "employees.SingleStarServlet", urlPatterns = "/api/employees/star")
+@WebServlet(name = "movies.employees.SingleStarServlet", urlPatterns = "/api/movies.employees/star")
 public class SingleStarServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
@@ -113,7 +109,7 @@ public class SingleStarServlet extends HttpServlet {
 
             jsonObject.addProperty("message", String.format("Star added. starId: %s", id));
             response.setStatus(201);
-            response.setHeader("Location", "/api/customers/star?id=" + id);
+            response.setHeader("Location", "/api/movies.customers/star?id=" + id);
 
             out.write(jsonObject.toString());
 
