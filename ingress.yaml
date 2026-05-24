@@ -2,21 +2,46 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/session-cookie-name: "stickounet"
-    nginx.ingress.kubernetes.io/session-cookie-expires: "172800"
-    nginx.ingress.kubernetes.io/session-cookie-max-age: "172800"
+    nginx.ingress.kubernetes.io/use-regex: "true"
   name: fablix-ingress
   namespace: default
 spec:
+  ingressClassName: nginx
   rules:
     - http:
         paths:
-          - backend:
+          - path: /cs122b/api/customers/login
+            pathType: Exact
+            backend:
               service:
-                name: fablix-service
+                name: fablix-login-service
                 port:
                   number: 8080
-            path: /
+          - path: /cs122b/api/employees/login
+            pathType: Exact
+            backend:
+              service:
+                name: fablix-login-service
+                port:
+                  number: 8080
+          - path: /cs122b/login.*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: fablix-login-service
+                port:
+                  number: 8080
+          - path: /cs122b/_dashboard/login.*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: fablix-login-service
+                port:
+                  number: 8080
+          - path: /
             pathType: Prefix
+            backend:
+              service:
+                name: fablix-movies-service
+                port:
+                  number: 8080
