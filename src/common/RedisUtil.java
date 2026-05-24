@@ -39,4 +39,22 @@ public class RedisUtil {
         }
     }
 
+    public static String get(String key) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.get(key);
+        }
+    }
+
+    public static void set(String key, String value, int ttlSeconds) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            jedis.set(key, value);
+            jedis.expire(key, ttlSeconds);
+        }
+    }
+
+    public static long increment(String key) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.incr(key);
+        }
+    }
 }
