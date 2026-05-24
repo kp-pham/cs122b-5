@@ -28,4 +28,6 @@
               username="mytestuser"
               password="My6$Password"
               url="jdbc:mysql://mysql-secondary:3306/moviedb?autoReconnect=true&amp;allowPublicKeyRetrieval=true&amp;useSSL=false&amp;cachePrepStmts=true"/>
+
+    <Environment name="redis/Address" type="java.lang.String" value="redis-service:6379"/>
 </Context>
