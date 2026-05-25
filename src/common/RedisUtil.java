@@ -5,6 +5,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 import javax.naming.InitialContext;
+import java.util.Map;
 
 public class RedisUtil {
     private static JedisPool jedisPool;
@@ -52,7 +53,25 @@ public class RedisUtil {
         }
     }
 
-    public static long increment(String key) {
+    public static Map<String, String> hgetAll(String key) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.hgetAll(key);
+        }
+    }
+
+    public static long hincrBy(String key, String field, long value) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.hincrBy(key, field, value);
+        }
+    }
+
+    public static void hdel(String key, String field) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            jedis.hdel(key, field);
+        }
+    }
+
+    public static long incr(String key) {
         try (Jedis jedis = jedisPool.getResource()) {
             return jedis.incr(key);
         }
