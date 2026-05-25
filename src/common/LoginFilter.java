@@ -32,7 +32,7 @@ public class LoginFilter implements Filter {
 
         if (sessionId == null) {
             if (isCustomerOnly(requestURI)) {
-                httpResponse.sendRedirect( httpRequest.getContextPath() + "login.html");
+                httpResponse.sendRedirect( httpRequest.getContextPath() + "/login.html");
             } else {
                 httpResponse.sendRedirect( httpRequest.getContextPath() + "/_dashboard/login.html");
             }
