@@ -55,7 +55,13 @@ public class RedisUtil {
         }
     }
 
-    public static Map<String, Integer> hgetAll(String key) {
+    public static String hget(String key, String field) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            return jedis.hget(key, field);
+        }
+    }
+
+    public static Map<String, String> hgetAll(String key) {
         try (Jedis jedis = jedisPool.getResource()) {
             return jedis.hgetAll(key);
         }

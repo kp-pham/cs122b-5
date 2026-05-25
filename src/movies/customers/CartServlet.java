@@ -45,12 +45,10 @@ public class CartServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
 
-        HttpSession session = request.getSession();
-
         String sessionId = RedisUtil.getCookieValue(request, "redisSessionId");
         String redisKey = "cart:" + sessionId;
 
-        Map<String, Integer> cart = RedisUtil.hgetAll(redisKey);
+        Map<String, String> cart = RedisUtil.hgetAll(redisKey);
 
         PrintWriter out = response.getWriter();
 
@@ -62,9 +60,9 @@ public class CartServlet extends HttpServlet {
 
             BigDecimal total = BigDecimal.ZERO;
 
-            for (Map.Entry<String, Integer> entry : cart.entrySet()) {
+            for (Map.Entry<String, String> entry : cart.entrySet()) {
                 String movieId = entry.getKey();
-                int quantity = entry.getValue();
+                int quantity = Integer.parseInt(entry.getValue());
 
                 statement.setString(1, movieId);
                 ResultSet rs = statement.executeQuery();
@@ -109,41 +107,38 @@ public class CartServlet extends HttpServlet {
         }
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("application/json");
 
-        HttpSession session = request.getSession();
-
-        Map<String, Integer> cart = (Map<String, Integer>) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new HashMap<>();
-            session.setAttribute("cart", cart);
-        }
+        String sessionId = RedisUtil.getCookieValue(request, "redisSessionId");
+        String redisKey = "cart:" + sessionId;
 
         String action = request.getParameter("action");
         String movieId = request.getParameter("id");
 
-        synchronized(cart) {
-            switch (action) {
-                case "add":
-                    cart.put(movieId, cart.getOrDefault(movieId, 0) + 1);
-                    break;
+        switch (action) {
+            case "add":
+                RedisUtil.hincrBy(redisKey, movieId, 1);
+                break;
 
-                case "subtract":
-                    int quantity = cart.getOrDefault(movieId, 0);
+            case "subtract":
+                String value = RedisUtil.hget(redisKey, movieId);
+
+                if (value != null) {
+                    int quantity = Integer.parseInt(value);
 
                     if (quantity > 1) {
-                        cart.put(movieId, cart.getOrDefault(movieId, 0) - 1);
+                        RedisUtil.hincrBy(redisKey, movieId, -1);
+                    } else {
+                        RedisUtil.hdel(redisKey, movieId);
                     }
+                }
 
-                    break;
+                break;
 
-                case "remove":
-                    cart.remove(movieId);
-                    break;
-            }
+            case "remove":
+                RedisUtil.hdel(redisKey, movieId);
+                break;
         }
-
-        doGet(request, response);
     }
 }
