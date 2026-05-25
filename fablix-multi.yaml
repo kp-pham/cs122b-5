@@ -110,7 +110,7 @@ metadata:
   name: fablix-login-service
 spec:
   selector:
-    app: murphy-login
+    app: fablix-login
   ports:
     - name: http
       port: 8080
