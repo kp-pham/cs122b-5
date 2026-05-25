@@ -1,7 +1,7 @@
 const loginForm = $("#login_form");
 const errorMessage = $("#login_error_message")
 
-function handleLoginSuccess(resultData) {
+function handleLoginSuccess() {
     window.location.replace("index.html");
 }
 

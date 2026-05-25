@@ -56,24 +56,28 @@ public class LoginFilter implements Filter {
             }
 
             JsonObject sessionObject = JsonParser.parseString(sessionJson).getAsJsonObject();
-            String username = sessionObject.get("username").getAsString();
+            String email = sessionObject.get("email").getAsString();
             String loginTime = sessionObject.get("loginTime").getAsString();
             String userType = sessionObject.get("userType").getAsString();
 
 
-            if (isCustomerOnly(requestURI) && !userType.equals("customer")) {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.html");
-                return;
+            if (isCustomerOnly(requestURI)) {
+                if (!userType.equals("customer")) {
+                    httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.html");
+                    return;
+                }
             }
 
-            if (isEmployeeOnly(requestURI) && !userType.equals("employee")) {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + "/_dashboard/login.html");
-                return;
+            if (isEmployeeOnly(requestURI)) {
+                if (!userType.equals("employee")) {
+                    httpResponse.sendRedirect(httpRequest.getContextPath() + "/_dashboard/login.html");
+                    return;
+                }
             }
 
-            RedisUtil.set(sessionKey, loginTime, SESSION_TTL_SECONDS);
+            RedisUtil.set(sessionKey, sessionJson, SESSION_TTL_SECONDS);
 
-            httpRequest.setAttribute("username", username);
+            httpRequest.setAttribute("email", email);
             httpRequest.setAttribute("loginTime", loginTime);
             httpRequest.setAttribute("userType", userType);
 
@@ -107,6 +111,8 @@ public class LoginFilter implements Filter {
         allowedURIs.add(".css");
         allowedURIs.add(".ico");
         allowedURIs.add(".png");
+
+        RedisUtil.init();
     }
 
     private String getCookieValue(HttpServletRequest request, String cookieName) {

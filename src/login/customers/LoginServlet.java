@@ -88,9 +88,9 @@ public class LoginServlet extends HttpServlet {
                 sessionObject.addProperty("email", email);
                 sessionObject.addProperty("loginTime", loginTime);
                 sessionObject.addProperty("userType", "customer");
-                RedisUtil.set("session" + sessionId, sessionObject.toString(), SESSION_TTL_SECONDS);
+                RedisUtil.set("session:" + sessionId, sessionObject.toString(), SESSION_TTL_SECONDS);
 
-                Cookie sessionCookie = new Cookie("session", sessionId);
+                Cookie sessionCookie = new Cookie("sessionRedisId", sessionId);
                 sessionCookie.setHttpOnly(true);
                 sessionCookie.setPath("/");
                 sessionCookie.setMaxAge(SESSION_TTL_SECONDS);
