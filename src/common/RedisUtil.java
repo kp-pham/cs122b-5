@@ -98,4 +98,11 @@ public class RedisUtil {
 
         return null;
     }
+
+    public static void deleteSession(String sessionId) {
+        try (Jedis jedis = jedisPool.getResource()) {
+            jedis.del("session:" + sessionId);
+            jedis.del("cart:" + sessionId);
+        }
+    }
 }
