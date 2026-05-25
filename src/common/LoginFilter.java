@@ -31,7 +31,12 @@ public class LoginFilter implements Filter {
         String sessionId = getCookieValue(httpRequest, "redisSessionId");
 
         if (sessionId == null) {
-            httpResponse.sendRedirect( "login.html");
+            if (isCustomerOnly(requestURI)) {
+                httpResponse.sendRedirect( httpRequest.getContextPath() + "login.html");
+            } else {
+                httpResponse.sendRedirect( httpRequest.getContextPath() + "/_dashboard/login.html");
+            }
+
             return;
         }
 
@@ -41,7 +46,12 @@ public class LoginFilter implements Filter {
             String sessionJson = RedisUtil.get(sessionKey);
 
             if (sessionJson == null || sessionJson.isEmpty()) {
-                httpResponse.sendRedirect("login.html");
+                if (isCustomerOnly(requestURI)) {
+                    httpResponse.sendRedirect( httpRequest.getContextPath() + "login.html");
+                } else {
+                    httpResponse.sendRedirect( httpRequest.getContextPath() + "/_dashboard/login.html");
+                }
+
                 return;
             }
 
