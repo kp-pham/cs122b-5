@@ -14,7 +14,7 @@ public class LogoutServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String sessionId = null;
-        RedisUtil.getCookieValue(request, "sessionRedisId");
+        sessionId = RedisUtil.getCookieValue(request, "sessionRedisId");
 
         if (sessionId != null) {
             RedisUtil.deleteSession(sessionId);
