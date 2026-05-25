@@ -19,7 +19,7 @@ import java.sql.ResultSet;
 
 import utils.ConnectionManager;
 
-@WebServlet(name = "movies.customers.AutocompleteServlet", urlPatterns="/api/movies.customers/autocomplete")
+@WebServlet(name = "customers.AutocompleteServlet", urlPatterns="/api/customers/autocomplete")
 public class AutocompleteServlet extends HttpServlet {
     private static final long SerialVersionUID = 2L;
 

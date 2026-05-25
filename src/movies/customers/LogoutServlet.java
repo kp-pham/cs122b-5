@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet(name = "movies.customers.LogoutServlet", urlPatterns = "/api/movies.customers/logout")
+@WebServlet(name = "customers.LogoutServlet", urlPatterns = "/api/customers/logout")
 public class LogoutServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@WebServlet(name = "movies.customers.SearchServlet", urlPatterns = "/api/movies.customers/search")
+@WebServlet(name = "customers.SearchServlet", urlPatterns = "/api/customers/search")
 public class SearchServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 

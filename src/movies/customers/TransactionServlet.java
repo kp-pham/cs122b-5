@@ -23,7 +23,7 @@ import java.util.Map;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@WebServlet(name = "movies.customers.TransactionServlet", urlPatterns = "/api/movies.customers/transactions")
+@WebServlet(name = "customers.TransactionServlet", urlPatterns = "/api/customers/transactions")
 public class TransactionServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 

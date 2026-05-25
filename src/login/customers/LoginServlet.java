@@ -27,7 +27,7 @@ import org.jasypt.util.password.StrongPasswordEncryptor;
 import utils.ConnectionManager;
 
 
-@WebServlet(name = "login.movies.customers.LoginServlet", urlPatterns = "/api/movies.customers/login")
+@WebServlet(name = "customers.LoginServlet", urlPatterns = "/api/customers/login")
 public class LoginServlet extends HttpServlet {
     private static final int SESSION_TTL_SECONDS = 24 * 60 * 60;
     private static final long serialVersionUID = 2L;

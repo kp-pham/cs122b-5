@@ -21,7 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Set;
 
-@WebServlet(name = "movies.customers.FullTextSearchServlet", urlPatterns = "/api/movies.customers/full-text")
+@WebServlet(name = "customers.FullTextSearchServlet", urlPatterns = "/api/customers/full-text")
 public class FullTextSearchServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 

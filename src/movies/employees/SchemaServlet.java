@@ -19,7 +19,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-@WebServlet(name = "movies.employees.SchemaServlet", urlPatterns="/api/movies.employees/schema")
+@WebServlet(name = "employees.SchemaServlet", urlPatterns="/api/employees/schema")
 public class SchemaServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 

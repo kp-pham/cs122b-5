@@ -19,7 +19,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-@WebServlet(name = "movies.customers.SingleStarServlet", urlPatterns= "/api/movies.customers/star")
+@WebServlet(name = "customers.SingleStarServlet", urlPatterns= "/api/customers/star")
 public class SingleStarServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
