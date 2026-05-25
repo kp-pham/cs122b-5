@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.naming.NamingException;
+
+import common.RedisUtil;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -34,6 +36,8 @@ public class SingleMovieServlet extends HttpServlet {
         } catch (NamingException e) {
             e.printStackTrace();
         }
+
+        RedisUtil.init();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

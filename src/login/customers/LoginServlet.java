@@ -35,13 +35,14 @@ public class LoginServlet extends HttpServlet {
     private DataSource dataSource;
 
     public void init(ServletConfig config) {
-        RedisUtil.init();
-
         try {
             dataSource = ConnectionManager.getSlaveDataSource();
         } catch (NamingException e) {
             e.printStackTrace();
         }
+
+        RedisUtil.init();
+
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

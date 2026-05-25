@@ -41,6 +41,8 @@ public class LoginServlet extends HttpServlet {
         } catch (NamingException e) {
             e.printStackTrace();
         }
+
+        RedisUtil.init();
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 
 import javax.naming.NamingException;
 
+import common.RedisUtil;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -47,6 +48,8 @@ public class FullTextSearchServlet extends HttpServlet {
         } catch (NamingException e) {
             e.printStackTrace();
         }
+
+        RedisUtil.init();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
