@@ -47,11 +47,10 @@ public class CartServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        Map<String, Integer> cart = (Map<String, Integer>) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new HashMap<>();
-            session.setAttribute("cart", cart);
-        }
+        String sessionId = RedisUtil.getCookieValue(request, "redisSessionId");
+        String redisKey = "cart:" + sessionId;
+
+        Map<String, Integer> cart = RedisUtil.hgetAll(redisKey);
 
         PrintWriter out = response.getWriter();
 

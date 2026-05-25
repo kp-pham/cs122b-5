@@ -28,7 +28,7 @@ public class LoginFilter implements Filter {
             return;
         }
 
-        String sessionId = getCookieValue(httpRequest, "redisSessionId");
+        String sessionId = RedisUtil.getCookieValue(httpRequest, "redisSessionId");
 
         if (sessionId == null) {
             if (isCustomerOnly(requestURI)) {
@@ -113,19 +113,5 @@ public class LoginFilter implements Filter {
         allowedURIs.add(".png");
 
         RedisUtil.init();
-    }
-
-    private String getCookieValue(HttpServletRequest request, String cookieName) {
-        Cookie[] cookies = request.getCookies();
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(cookieName)) {
-                    return cookie.getValue();
-                }
-            }
-        }
-
-        return null;
     }
 }

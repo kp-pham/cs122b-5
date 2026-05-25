@@ -1,5 +1,7 @@
 package common;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
@@ -53,7 +55,7 @@ public class RedisUtil {
         }
     }
 
-    public static Map<String, String> hgetAll(String key) {
+    public static Map<String, Integer> hgetAll(String key) {
         try (Jedis jedis = jedisPool.getResource()) {
             return jedis.hgetAll(key);
         }
@@ -75,5 +77,19 @@ public class RedisUtil {
         try (Jedis jedis = jedisPool.getResource()) {
             return jedis.incr(key);
         }
+    }
+
+    public static String getCookieValue(HttpServletRequest request, String cookieName) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(cookieName)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
+        return null;
     }
 }
