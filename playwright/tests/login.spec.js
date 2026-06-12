@@ -1,14 +1,14 @@
 import { test, expect } from './fixtures';
 
-test.use({ sessionState: undefined });
+test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('customer login', () => {
     test('page loaded', async ({ loginPage }) => {
         await loginPage.goto();
-        await expect(loginPage.signInHeader).toBeVisible();
-        await expect(loginPage.emailInput).toBeVisible();
-        await expect(loginPage.passwordInput).toBeVisible();
-        await expect(loginPage.loginButton).toBeVisible();
+        await expect(loginPage.signInHeader()).toBeVisible();
+        await expect(loginPage.emailInput()).toBeVisible();
+        await expect(loginPage.passwordInput()).toBeVisible();
+        await expect(loginPage.loginButton()).toBeVisible();
     });
 
     test('incorrect password', async ({ loginPage }) => {
@@ -20,6 +20,6 @@ test.describe('customer login', () => {
     test('successful', async ({ loginPage, homePage }) => {
         await loginPage.goto();
         await loginPage.login("a@email.com", "a2");
-        await expect(homePage.logoutButton).toBeVisible();
+        await expect(homePage.logoutButton()).toBeVisible();
     });
 });

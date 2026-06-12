@@ -1,7 +1,6 @@
 class HomePage {
     constructor(page) {
         this.page = page;
-        this.logoutButton = page.getByRole('button', { name: 'Logout' });
     }
 
     async goto() {
@@ -9,7 +8,11 @@ class HomePage {
     }
 
     async logout() {
-        await this.logoutButton.click();
+        await this.logoutButton().click();
+    }
+
+    logoutButton() {
+        return this.page.getByRole('button', { name: 'Logout' });
     }
 }
 

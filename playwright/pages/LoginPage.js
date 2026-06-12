@@ -1,10 +1,6 @@
 class LoginPage {
     constructor(page) {
         this.page = page;
-        this.signInHeader = page.getByRole('heading', { name: 'Sign in' });
-        this.emailInput = page.getByRole('textbox', { name: 'Email Address' });
-        this.passwordInput = page.getByRole('textbox', { name: 'Password' });
-        this.loginButton = page.getByRole('button', { name: 'Login' });
     }
 
     async goto() {
@@ -12,9 +8,25 @@ class LoginPage {
     }
 
     async login(email, password) {
-        await this.emailInput.fill(email);
-        await this.passwordInput.fill(password);
-        await this.loginButton.click();
+        await this.emailInput().fill(email);
+        await this.passwordInput().fill(password);
+        await this.loginButton().click();
+    }
+
+    signInHeader() {
+        return this.page.getByRole('heading', { name: 'Sign in' });
+    }
+
+    emailInput() {
+        return this.page.getByRole('textbox', { name: 'Email Address' });
+    }
+
+    passwordInput() {
+        return this.page.getByRole('textbox', { name: 'Password' });
+    }
+
+    loginButton() {
+        return this.page.getByRole('button', { name: 'Login' });
     }
 };
 

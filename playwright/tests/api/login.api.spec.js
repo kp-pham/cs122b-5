@@ -1,5 +1,7 @@
 import { test, expect } from '../fixtures';
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe("login API endpoints", () => {
     test('return 200 and cookie when login successful', async ({ loginService }) => {
         const response = await loginService.login({
@@ -12,6 +14,7 @@ test.describe("login API endpoints", () => {
         const setCookieHeader = response.headers()['set-cookie'];
         
         expect(setCookieHeader).not.toBeNull();
+        expect(setCookieHeader).not.toBeUndefined();
         expect(setCookieHeader).toContain('JSESSIONID=');
     });
 
