@@ -1,5 +1,5 @@
 class HomePage {
-    constructor (page) {
+    constructor(page) {
         this.page = page;
         this.logoutButton = page.getByRole('button', { name: 'Logout' });
     }
