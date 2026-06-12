@@ -1,4 +1,4 @@
-class LoginClient {
+class LoginService {
     constructor(request) {
         this.request = request;
     }
@@ -11,4 +11,4 @@ class LoginClient {
     }
 };
 
-export default LoginClient;
+export default LoginService;

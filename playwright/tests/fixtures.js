@@ -1,7 +1,7 @@
 import { test as base } from '@playwright/test';
 import LoginPage from '../pages/LoginPage';
 import HomePage from '../pages/HomePage';
-import LoginClient from '../api-clients/LoginClient';
+import LoginService from '../services/LoginService';
 
 export const test = base.extend({
     loginPage: async ({ page }, use) => {
@@ -15,9 +15,9 @@ export const test = base.extend({
         await use(homePage);
     },
 
-    loginClient: async ({ request }, use) => {
-        const loginClient = new LoginClient(request);
-        await use(loginClient);
+    loginService: async ({ request }, use) => {
+        const loginService = new LoginService(request);
+        await use(loginService);
     }
 });
 
