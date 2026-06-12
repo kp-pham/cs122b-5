@@ -9,6 +9,13 @@ class LoginService {
             failOnStatusCode: false,
         });
     }
+
+    async logout(payload) {
+        return await this.request.post('https://localhost:8443/cs122b_war/api/customers/logout', {
+            form: payload,
+            failOnStatusCode: false,
+        });
+    }
 };
 
 export default LoginService;
