@@ -38,24 +38,24 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
 
-        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+//        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 
         PrintWriter out = response.getWriter();
 
-        try {
-            RecaptchaVerifyUtils.verify(gRecaptchaResponse);
-
-        } catch (Exception e) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("message", "reCAPTCHA verification failed. Please try again.");
-            out.write(jsonObject.toString());
-
-            request.getServletContext().log("Error:", e);
-            response.setStatus(400);
-
-            out.close();
-            return;
-        }
+//        try {
+//            RecaptchaVerifyUtils.verify(gRecaptchaResponse);
+//
+//        } catch (Exception e) {
+//            JsonObject jsonObject = new JsonObject();
+//            jsonObject.addProperty("message", "reCAPTCHA verification failed. Please try again.");
+//            out.write(jsonObject.toString());
+//
+//            request.getServletContext().log("Error:", e);
+//            response.setStatus(400);
+//
+//            out.close();
+//            return;
+//        }
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");

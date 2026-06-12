@@ -11,7 +11,7 @@
 
 
 DROP FUNCTION IF EXISTS edrec;
-CREATE FUNCTION edrec RETURNS INTEGER SONAME 'libedrec.so';
+CREATE FUNCTION edrec RETURNS INTEGER SONAME 'libedrec.dll';
 
 SELECT edrec('ab', 'xx ad xx', 1);
 SELECT edrec('abc', 'ad', 2);

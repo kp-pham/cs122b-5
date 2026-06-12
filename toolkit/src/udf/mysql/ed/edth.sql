@@ -10,7 +10,7 @@
 -- Maintainer: Yicong Huang <yicongh1 (at) uci.edu>
 
 DROP FUNCTION IF EXISTS edth;
-CREATE FUNCTION edth RETURNS INTEGER SONAME 'libedth.so';
+CREATE FUNCTION edth RETURNS INTEGER SONAME 'libedth.dll';
 
 SELECT edth('abc', 'ad', 1);
 SELECT edth('abc', 'ad', 2);

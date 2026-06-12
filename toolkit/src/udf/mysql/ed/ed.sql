@@ -11,7 +11,7 @@
 
 
 DROP FUNCTION IF EXISTS ed;
-CREATE FUNCTION ed RETURNS INTEGER SONAME 'libed.so';
+CREATE FUNCTION ed RETURNS INTEGER SONAME 'libed.dll';
 
 SELECT ed('abc', 'ad');
 SELECT ed('abc', 'aaa');

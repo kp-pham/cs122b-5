@@ -12,28 +12,36 @@
 #
 
 CC=gcc
-CFLAGS=-fPIC -Wall -O3 -I/usr/include/mysql
+#CFLAGS=-fPIC -Wall -O3 -I/usr/include/mysql
+CFLAGS=-fPIC -Wall -O3 -I"C:\Program Files\MySQL\MySQL Server 8.0\include"
 LDFLAGS=-L. -ledrec
 
-all: libed.so libedth.so libedrec.so
+#all: libed.so libedth.so libedrec.so
+all: libed.dll libedth.dll libedrec.dll
 
-libed.so: ed.c
+#libed.so: ed.c
+libed.dll: ed.c
 	${CC} ${CFLAGS} -shared -o $@ $?
 
-libedth.so: edth.c
+#libedth.so: edth.c
+libedth.dll: edth.c
 	${CC} ${CFLAGS} -shared -o $@ $?
 
-libedrec.so: edrec.c
+#libedrec.so: edrec.c
+libedrec.dll: edrec.c
 	${CC} ${CFLAGS} -shared -o $@ $?
 
+#cat ed.sql edth.sql edrec.sql | mysql -u mytestuser -p
 .PHONY: test
 test:
-	cat ed.sql edth.sql edrec.sql | mysql -u mytestuser -p
+	powershell -Command "Get-Content ed.sql, edth.sql, edrec.sql | mysql -u mytestuser -p"
 
+#	-rm unittest *.so *.o *~
 .PHONY: clean
 clean:
-	-rm unittest *.so *.o *~
+	-del /Q unittest.exe *.dll *.o *~ 2>nul
 
-unittest: unittest.o libedrec.so
+#unittest: unittest.o libedrec.so
+unittest: unittest.o libedrec.dll
 
 unittest.o: edrec.h
