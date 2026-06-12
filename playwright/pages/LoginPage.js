@@ -1,11 +1,9 @@
-import { expect } from '@playwright/test';
-
 class LoginPage {
     constructor(page) {
         this.page = page;
         this.signInHeader = page.getByRole('heading', { name: 'Sign in' });
-        this.emailTextbox = page.getByRole('textbox', { name: 'Email Address' });
-        this.passwordTextbox = page.getByRole('textbox', { name: 'Password' });
+        this.emailInput = page.getByRole('textbox', { name: 'Email Address' });
+        this.passwordInput = page.getByRole('textbox', { name: 'Password' });
         this.loginButton = page.getByRole('button', { name: 'Login' });
     }
 
@@ -14,8 +12,8 @@ class LoginPage {
     }
 
     async login(email, password) {
-        await this.emailTextbox.fill(email);
-        await this.passwordTextbox.fill(password);
+        await this.emailInput.fill(email);
+        await this.passwordInput.fill(password);
         await this.loginButton.click();
     }
 };
