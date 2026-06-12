@@ -1,4 +1,7 @@
 import { test as base } from '@playwright/test';
+import fs from 'fs';
+import path from 'path';
+
 import LoginPage from '../pages/LoginPage';
 import HomePage from '../pages/HomePage';
 import LoginService from '../services/LoginService';
@@ -6,7 +9,6 @@ import LoginService from '../services/LoginService';
 export const test = base.extend({
     loginPage: async ({ page }, use) => {
         const loginPage = new LoginPage(page);
-        await loginPage.goto();
         await use(loginPage);
     },
     

@@ -1,7 +1,10 @@
 import { test, expect } from './fixtures';
 
+test.use({ sessionState: undefined });
+
 test.describe('customer login', () => {
     test('page loaded', async ({ loginPage }) => {
+        await loginPage.goto();
         await expect(loginPage.signInHeader).toBeVisible();
         await expect(loginPage.emailInput).toBeVisible();
         await expect(loginPage.passwordInput).toBeVisible();
@@ -9,11 +12,13 @@ test.describe('customer login', () => {
     });
 
     test('incorrect password', async ({ loginPage }) => {
+        await loginPage.goto();
         await loginPage.login("a@email.com", "a1");
         await expect(loginPage.page.getByText('Incorrect username or password')).toBeVisible();
     });
 
     test('successful', async ({ loginPage, homePage }) => {
+        await loginPage.goto();
         await loginPage.login("a@email.com", "a2");
         await expect(homePage.logoutButton).toBeVisible();
     });
