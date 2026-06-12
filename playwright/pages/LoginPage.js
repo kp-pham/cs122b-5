@@ -6,8 +6,18 @@ class LoginPage {
         this.signInHeader = page.getByRole('heading', { name: 'Sign in' });
         this.emailTextbox = page.getByRole('textbox', { name: 'Email Address' });
         this.passwordTextbox = page.getByRole('textbox', { name: 'Password' });
-        this.signInButton = page.getByRole('button', { name: 'Login' });
+        this.loginButton = page.getByRole('button', { name: 'Login' });
+    }
+
+    async goto() {
+        await this.page.goto('https://localhost:8443/cs122b_war/login.html');
+    }
+
+    async login(email, password) {
+        await this.emailTextbox.fill(email);
+        await this.passwordTextbox.fill(password);
+        await this.loginButton.click();
     }
 };
 
-export default Playwright;
+export default LoginPage;
