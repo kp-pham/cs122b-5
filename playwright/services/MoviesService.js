@@ -1,0 +1,21 @@
+class MoviesService {
+    constructor(request) {
+        this.request = request;
+    }
+
+    async search({ title = null, year = null, director = null, star = null } ) {
+        return await this.request.get('https://localhost:8443/cs122b_war/api/customers/search', {
+            params: {
+                ...(title !== null && { title }),
+                ...(year !== null && { year }),
+                ...(director !== null && { director }),
+                ...(star !== null && { star }),
+                sort: 'title-asc-rating-desc',
+                page: 1,
+                pageSize: 25,
+            }
+        });
+    }
+};
+
+export default MoviesService;
