@@ -144,7 +144,7 @@ function showResults() {
     jQuery.ajax({
         dataType: "json",
         method: "GET",
-        url: `api/${state["type"]}?${encodeParams(params)}`,
+        url: `api/customers/${state["type"]}?${encodeParams(params)}`,
         success: (resultData) => handleResult(resultData)
     });
 }
