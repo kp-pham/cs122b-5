@@ -16,6 +16,10 @@ class MoviesService {
             }
         });
     }
+
+    async cartContents() {
+        return await this.request.get('https://localhost:8443/cs122b_war/api/customers/cart');
+    }
 };
 
 export default MoviesService;

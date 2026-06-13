@@ -27,4 +27,12 @@ test.describe('movies service API endpoints', () => {
             ]
         });
     });
+
+    test('empty cart has no items and zero total price', async ({ moviesService }) => {
+        const response = await moviesService.cartContents();
+        expect(response.status()).toBe(200);
+
+        const body = await response.json();
+        expect(body).toMatchObject({ items: [], total: 0.00 });
+    });
 });
