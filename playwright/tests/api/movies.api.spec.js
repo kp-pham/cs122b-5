@@ -1,5 +1,7 @@
 import { test, expect } from '../fixtures/base.fixture';
 
+test.describe.configure({ mode: 'serial' });
+
 test.describe('movies service API endpoints', () => {
     test('basic search returns correct results', async ({ moviesService }) => {
         const response = await moviesService.search({ title: 'term', star: 'tom' });
@@ -48,7 +50,7 @@ test.describe('movies service API endpoints', () => {
             items: expect.arrayContaining([
                 expect.objectContaining({ id: 'tt0362227', title: 'The Terminal' }),
             ]),
-            totalPrice: 13.99,
+            total: 13.99,
         });
     });
 });
