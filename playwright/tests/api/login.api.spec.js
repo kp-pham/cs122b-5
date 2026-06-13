@@ -1,4 +1,4 @@
-import { test, expect } from '../fixtures';
+import { test, expect } from '../fixtures/base.fixture';
 
 test.use({ storageState: { cookies: [], origins: [] } });
 

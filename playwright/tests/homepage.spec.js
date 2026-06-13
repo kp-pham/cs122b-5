@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { test, expect } from './fixtures/base.fixture';
 
 test.describe("homepage", () => {
     test('redirects to login page upon logout', async ({ loginPage, homePage }) => {
