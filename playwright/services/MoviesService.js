@@ -20,6 +20,15 @@ class MoviesService {
     async cartContents() {
         return await this.request.get('https://localhost:8443/cs122b_war/api/customers/cart');
     }
+    
+    async addToCart(movieId) {
+        return await this.request.post('https://localhost:8443/cs122b_war/api/customers/cart', {
+            form: {
+                action: 'add',
+                id: movieId,
+            }
+        });
+    }
 };
 
 export default MoviesService;

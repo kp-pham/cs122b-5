@@ -35,4 +35,20 @@ test.describe('movies service API endpoints', () => {
         const body = await response.json();
         expect(body).toMatchObject({ items: [], total: 0.00 });
     });
+
+    test('cart contents updated when movie added to cart', async ({ moviesService }) => {
+        const cartActionResponse = await moviesService.addToCart('tt0362227');
+        expect(cartActionResponse.status()).toBe(200);
+
+        const cartContentsResponse = await moviesService.cartContents();
+        expect(cartActionResponse.status()).toBe(200);
+
+        const body = await cartContentsResponse.json();
+        expect(body).toMatchObject({
+            items: expect.arrayContaining([
+                expect.objectContaining({ id: 'tt0362227', title: 'The Terminal' }),
+            ]),
+            totalPrice: 13.99,
+        });
+    });
 });
