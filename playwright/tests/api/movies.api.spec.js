@@ -38,6 +38,7 @@ test.describe('movies service API endpoints', () => {
         expect(body).toMatchObject({ items: [], total: 0.00 });
     });
 
+
     test('cart contents updated when movie added to cart', async ({ moviesService }) => {
         const cartActionResponse = await moviesService.addToCart('tt0362227');
         expect(cartActionResponse.status()).toBe(200);
@@ -51,6 +52,52 @@ test.describe('movies service API endpoints', () => {
                 expect.objectContaining({ id: 'tt0362227', title: 'The Terminal' }),
             ]),
             total: 13.99,
+        });
+    });
+
+    test('cart stores more than one copy of the same movie', async ({ moviesService }) => {
+        const cartActionResponse = await moviesService.addToCart('tt0362227');
+        expect(cartActionResponse.status()).toBe(200);
+
+        const cartContentsResponse = await moviesService.cartContents();
+        expect(cartActionResponse.status()).toBe(200);
+
+        const body = await cartContentsResponse.json();
+        expect(body).toMatchObject({
+            items: expect.arrayContaining([
+                expect.objectContaining({ 
+                    id: 'tt0362227', 
+                    title: 'The Terminal', 
+                    quantity: 2, 
+                }),
+            ]),
+            total: 27.98,
+        });
+    });
+
+    test('cart stores separate copies for different movies', async ({ moviesService }) => {
+        const cartActionResponse = await moviesService.addToCart('tt0449018');
+        expect(cartActionResponse.status()).toBe(200);
+
+        const cartContentsResponse = await moviesService.cartContents();
+        expect(cartActionResponse.status()).toBe(200);
+
+        const body = await cartContentsResponse.json();
+        expect(body).toMatchObject({
+            items: expect.arrayContaining([
+                expect.objectContaining({ 
+                    id: 'tt0362227', 
+                    title: 'The Terminal', 
+                    quantity: 2,
+                }),
+
+                expect.objectContaining({
+                    id: 'tt0449018',
+                    title: 'The Final Season',
+                    quantity: 1
+                })
+            ]),
+            total: 48.97,
         });
     });
 });
