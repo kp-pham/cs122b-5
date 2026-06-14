@@ -29,6 +29,17 @@ class MoviesService {
             }
         });
     }
+
+    async placeOrder({ firstName = null, lastName = null, card = null, expiration = null }) {
+        return await this.request.post('https://localhost:8443/cs122b_war/api/customers/transactions', {
+            form: {
+                ...(firstName !== null && { firstName }),
+                ...(lastName !== null && { lastName }),
+                ...(card !== null && { card }),
+                ...(expiration !== null && { expiration }),
+            }
+        });
+    }
 };
 
 export default MoviesService;

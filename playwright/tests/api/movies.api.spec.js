@@ -100,4 +100,15 @@ test.describe('movies service API endpoints', () => {
             total: 48.97,
         });
     });
+
+    test('returns 400 when invalid payment information provided', async ({ moviesService }) => {
+        const response = await moviesService.placeOrder({
+            firstName: 'Tolly',
+            lastName: 'Zhang',
+            card: '06137888888878061388',
+            expiration: '2026-06-13'
+        });
+
+        expect(response.status()).toBe(400);
+    });
 });
