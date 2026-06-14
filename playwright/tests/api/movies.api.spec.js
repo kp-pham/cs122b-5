@@ -1,7 +1,5 @@
 import { test, expect } from '../fixtures/base.fixture';
 
-test.describe.configure({ mode: 'serial' });
-
 test.describe('movies service API endpoints', () => {
     test('basic search returns correct results', async ({ moviesService }) => {
         const response = await moviesService.search({ title: 'term', star: 'tom' });
@@ -38,32 +36,31 @@ test.describe('movies service API endpoints', () => {
         expect(body).toMatchObject({ items: [], total: 0.00 });
     });
 
-
-    test('cart contents updated when movie added to cart', async ({ moviesService }) => {
-        const cartActionResponse = await moviesService.addToCart('tt0362227');
+    test('shopping cart lifecycle', async ({ moviesService }) => {
+        // First copy of 'The Terminal' added to cart
+        let cartActionResponse = await moviesService.addToCart('tt0362227');
         expect(cartActionResponse.status()).toBe(200);
 
-        const cartContentsResponse = await moviesService.cartContents();
-        expect(cartActionResponse.status()).toBe(200);
+        let cartContentsResponse = await moviesService.cartContents();
+        expect(cartContentsResponse.status()).toBe(200);
 
-        const body = await cartContentsResponse.json();
-        expect(body).toMatchObject({
+        let cartContents = await cartContentsResponse.json();
+        expect(cartContents).toMatchObject({
             items: expect.arrayContaining([
                 expect.objectContaining({ id: 'tt0362227', title: 'The Terminal' }),
             ]),
             total: 13.99,
         });
-    });
 
-    test('cart stores more than one copy of the same movie', async ({ moviesService }) => {
-        const cartActionResponse = await moviesService.addToCart('tt0362227');
+        // Second copy of 'The Terminal' added to cart
+        cartActionResponse = await moviesService.addToCart('tt0362227');
         expect(cartActionResponse.status()).toBe(200);
 
-        const cartContentsResponse = await moviesService.cartContents();
+        cartContentsResponse = await moviesService.cartContents();
         expect(cartActionResponse.status()).toBe(200);
 
-        const body = await cartContentsResponse.json();
-        expect(body).toMatchObject({
+        cartContents = await cartContentsResponse.json();
+        expect(cartContents).toMatchObject({
             items: expect.arrayContaining([
                 expect.objectContaining({ 
                     id: 'tt0362227', 
@@ -73,17 +70,16 @@ test.describe('movies service API endpoints', () => {
             ]),
             total: 27.98,
         });
-    });
-
-    test('cart stores separate copies for different movies', async ({ moviesService }) => {
-        const cartActionResponse = await moviesService.addToCart('tt0449018');
+        
+        // First copy of 'The Final Season' added to cart
+        cartActionResponse = await moviesService.addToCart('tt0449018');
         expect(cartActionResponse.status()).toBe(200);
 
-        const cartContentsResponse = await moviesService.cartContents();
+        cartContentsResponse = await moviesService.cartContents();
         expect(cartActionResponse.status()).toBe(200);
 
-        const body = await cartContentsResponse.json();
-        expect(body).toMatchObject({
+        cartContents = await cartContentsResponse.json();
+        expect(cartContents).toMatchObject({
             items: expect.arrayContaining([
                 expect.objectContaining({ 
                     id: 'tt0362227', 
@@ -99,21 +95,19 @@ test.describe('movies service API endpoints', () => {
             ]),
             total: 48.97,
         });
-    });
 
-    test('returns 400 when invalid payment information provided', async ({ moviesService }) => {
-        const response = await moviesService.placeOrder({
+        // Checkout with invalid payment information
+        let placeOrderResponse = await moviesService.placeOrder({
             firstName: 'Tolly',
             lastName: 'Zhang',
             card: '06137888888878061388',
             expiration: '2026-06-13'
         });
 
-        expect(response.status()).toBe(400);
-    });
+        expect(placeOrderResponse.status()).toBe(400);
 
-    test('correct order details when order is placed', async ({ moviesService }) => {
-        const placeOrderResponse = await moviesService.placeOrder({
+        // Order placed after checkout with valid payment information
+        placeOrderResponse = await moviesService.placeOrder({
             firstName: 'Tolly',
             lastName: 'Zhang',
             card: '06137888888878061388',
@@ -122,10 +116,10 @@ test.describe('movies service API endpoints', () => {
 
         expect(placeOrderResponse.status()).toBe(200);
 
-        const orderDetailsResponse = await moviesService.orderDetails();
+        let orderDetailsResponse = await moviesService.orderDetails();
         expect(orderDetailsResponse.status()).toBe(200);
 
-        const body = await orderDetailsResponse.json();
-        expect(body).toMatchObject({ total: 48.97 });
+        let orderDetails = await orderDetailsResponse.json();
+        expect(orderDetails).toMatchObject({ total: 48.97 });
     });
 });
