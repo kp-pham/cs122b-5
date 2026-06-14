@@ -111,4 +111,21 @@ test.describe('movies service API endpoints', () => {
 
         expect(response.status()).toBe(400);
     });
+
+    test('correct order details when order is placed', async ({ moviesService }) => {
+        const placeOrderResponse = await moviesService.placeOrder({
+            firstName: 'Tolly',
+            lastName: 'Zhang',
+            card: '06137888888878061388',
+            expiration: '2005-06-13'
+        });
+
+        expect(placeOrderResponse.status()).toBe(200);
+
+        const orderDetailsResponse = await moviesService.orderDetails();
+        expect(orderDetailsResponse.status()).toBe(200);
+
+        const body = await orderDetailsResponse.json();
+        expect(body).toMatchObject({ total: 48.97 });
+    });
 });
