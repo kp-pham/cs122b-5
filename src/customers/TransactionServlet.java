@@ -24,7 +24,7 @@ import java.util.Map;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@WebServlet(name = "customers.TransactionServlet", urlPatterns = "/api/transactions")
+@WebServlet(name = "customers.TransactionServlet", urlPatterns = "/api/customers/transactions")
 public class TransactionServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 

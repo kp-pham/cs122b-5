@@ -22,7 +22,7 @@ function submitPaymentForm(formSubmitEvent) {
         dataType: "json",
         method: "POST",
         data: paymentForm.serialize(),
-        url: "api/transactions",
+        url: "api/customers/transactions",
         success: (resultData) => handleSuccess(resultData),
         error: (jqXHR) => handleFailure(jqXHR)
     });
@@ -31,7 +31,7 @@ function submitPaymentForm(formSubmitEvent) {
 jQuery.ajax({
     dataType: "json",
     method: "GET",
-    url: "api/transactions",
+    url: "api/customers/transactions",
     success: (resultData) => handleResult(resultData)
 });
 

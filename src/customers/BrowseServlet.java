@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@WebServlet(name = "customers.BrowseServlet", urlPatterns = "/api/browse")
+@WebServlet(name = "customers.BrowseServlet", urlPatterns = "/api/customers/browse")
 public class BrowseServlet extends HttpServlet {
     private static final long serialVersionUID = 2L;
 
